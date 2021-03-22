@@ -4,7 +4,7 @@ Here you'll find some scripts that hepls me to understand better somethings abou
 
 In Data Engineering scripts we'll use Docker to run a container that includes Spark and Jupiter.
 
-##Download Docker:
+## Download Docker:
 -----------
 
 ### Windows and macOS
@@ -28,7 +28,8 @@ pip install docker-compose
 
 > **Note:** Docker Compose requires Python 3.6 or later.
 
-Using Docker Compose for this process:
+## Using Docker Compose for this process:
+-----------
 1. Download docker-compose.yml file.
 2. Run Docker from cmd or your console.
 3. Reach the directory where the file is and run `docker-compose up` and Compose will start and run your entire
