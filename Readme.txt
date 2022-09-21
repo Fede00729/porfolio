@@ -1,0 +1,1 @@
+Consultar los tickers de origen con la API demora 72min.
