@@ -1,5 +1,3 @@
-# Readme Cedears
-
 ## Objetivo
 
 - *Analizar precios* de Cedears *y* su acción correspondiente para evaluar *posible arbitraje*.
