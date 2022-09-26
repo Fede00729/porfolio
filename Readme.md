@@ -1,7 +1,6 @@
 ## Objetive
-- Analyze the prices of Argentine Cedears and their equivalent share to detect a possible arbitrage due to the dollar price.
-
-**Note:** Cedears are instruments that are equivalent to major world shares. Cedear ratios indicate how many cedears are needed to equal one share.
+- Analyze the prices of Argentine Cedears and their equivalent share to detect a possible arbitrage due to the dollar price.                    
+> **Note:** Cedears are instruments that are equivalent to major world shares. Cedear ratios indicate how many cedears are needed to equal one share.
 
 ## Process
 
