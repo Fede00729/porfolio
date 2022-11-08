@@ -1,32 +1,54 @@
 # Welcome to my porfolio
+Hi! I'm **Federico Giacomantone**.
 
-Here you'll find some scripts that hepls me to understand better somethings about interesting topics for me.
+Mechanical engineer and passionate about data.
+Looking for new opportunities in Big Data/ETL.
 
-In **Data Engineering** scripts we'll use Docker to run a container that includes Spark and Jupiter.
+Self taught Python.
+
+English medium level.
 
 
-### Download Docker:
+## Skills
 
-#### Windows and macOS
-Docker Compose is included in
-[Docker Desktop](https://www.docker.com/products/docker-desktop)
-for Windows and macOS.
+<p align="Rigth">
+    <a>
+        <img src="https://img.shields.io/badge/-python-blue?style=square&logo=python&logoColor=ffdd54"/></a>
+    <a>
+        <img src="https://img.shields.io/badge/-pandas-%23150458?style=square&logo=pandas&logoColor=white"/></a>
+	<a>
+		<img src="https://img.shields.io/badge/-numpy-%23013243?style=square&logo=numpy&logoColor=white"/></a>
+    <a>
+        <img src="https://img.shields.io/badge/-matplotlib-%23ffffff?style=square&logo=matplotlib&logoColor=white"/></a>
+</p>
+<p align="Rigth">
+<a>
+        <img src="https://img.shields.io/badge/-postgresql-%23316192?style=square&logo=postgresql&logoColor=white"/></a>
+    <a>
+        <img src="https://img.shields.io/badge/-mysql-%2300f?style=square&logo=mysql&logoColor=white"/></a>
+	<a>
+        <img src="https://img.shields.io/badge/-apachespark-blue?style=square&logo=apachespark&logoColor=white"/></a>
+</p>
+<p align="Rigth">
+<a>
+        <img src="https://img.shields.io/badge/-jupyter-%23FA0F00?style=square&logo=jupyter&logoColor=white"/></a>
+<a>
+        <img src="https://img.shields.io/badge/-docker-%230db7ed?style=square&logo=docker&logoColor=white"/></a>
+</p>
+<p align="Rigth">
+<a>
+        <img src="https://img.shields.io/badge/-Git-%23F05033?style=square&logo=Git&logoColor=white"/></a>
+<a>
+        <img src="https://img.shields.io/badge/VS%20Code-0078d7?style=square&logo=visual-studio-code&logoColor=white"/></a>
+</p>
 
-#### Linux
-You can download Docker Compose binaries from the
-[release page](https://github.com/docker/compose/releases) on this repository.
 
-#### Using pip
-If your platform is not supported, you can download Docker Compose using `pip`:
+## Contact
 
-```console
-pip install docker-compose
-```
-> **Note:** Docker Compose requires Python 3.6 or later.
+[![email: federicogiacomantone](https://img.shields.io/badge/-fede.giacomantone@hotmail.com-0078D4?style=square&logo=microsoft-outlook&logoColor=white)](mailto:fede.giacomantone@hotmail.com)
 
-### Using Docker Compose for this process:
-1. Download *docker-compose.yml* file.
-2. Run Docker from cmd or your console.
-3. Reach the directory where the file is and run `docker-compose up` and Compose will start and run your entire
-   app.
-4. Open Jupiter Notebook in your web browser with the link that your cmd or conselo show you.
+
+[![Linkedin: federicogiacomantone](https://img.shields.io/badge/-federico%20giacomantone-blue?style=square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/federico-giacomantone)
+
+
+[![GitHub Fede00729](https://img.shields.io/github/followers/Fede00729?label=follow&style=social)](https://github.com/Fede00729)
