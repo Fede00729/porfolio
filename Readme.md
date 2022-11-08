@@ -7,7 +7,7 @@
 1. Run **[listado.ipynb](https://github.com/Fede00729/Cedears/blob/main/Listado.ipynb "listado.ipynb")**, a table of stock and cedear tickers is generated with their equivalence ratio.                    
 **listado.csv** is created.
 
-2. **[api_consult.ipynb](http://https://github.com/Fede00729/Cedears/blob/main/api_consult.ipynb "api_consult.ipynb")** is run using the Alpha-Vantage API and the stock tickers from **listado.csv** to get the stock quotes.                    
+2. **[api_consult.ipynb](https://github.com/Fede00729/Cedears/blob/main/api_consult.ipynb "api_consult.ipynb")** is run using the Alpha-Vantage API and the stock tickers from **listado.csv** to get the stock quotes.                    
 **origin_tickets/origin_tickets_date.csv** is created.
 
 3. **[local_prices.ipynb](https://github.com/Fede00729/Cedears/blob/main/local_prices.ipynb "local_prices.ipynb")** is executed using the tickers of the cedears of **listado.csv** to extract the prices of the cedears that are loaded through json in the Buenos Aires stock exchange panel.                    
