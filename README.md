@@ -1,8 +1,8 @@
 # Welcome to my porfolio
 Hi! I'm **Federico Giacomantone**.
 
-Mechanical engineer and passionate about data.
-Looking for new opportunities in Big Data/ETL.
+Mechanical engineer and Python dev, passionate about data & ETL.
+
 
 Self taught Python.
 
