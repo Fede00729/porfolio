@@ -4,7 +4,7 @@
 
 ## Process
 
-1. Run **[listado.ipynb](https://github.com/Fede00729/porfolio/blob/main/cedears/Listado.ipynb "listado.ipynb")**, a table of stock and cedear tickers is generated with their equivalence ratio.                    
+1. Run **[listado.ipynb](https://github.com/Fede00729/porfolio/blob/main/cedears/listado.ipynb "listado.ipynb")**, a table of stock and cedear tickers is generated with their equivalence ratio.                    
 **listado.csv** is created.
 
 2. **[api_consult.ipynb](https://github.com/Fede00729/porfolio/blob/main/cedears/api_consult.ipynb "api_consult.ipynb")** is run using the Alpha-Vantage API and the stock tickers from **listado.csv** to get the stock quotes.                    
