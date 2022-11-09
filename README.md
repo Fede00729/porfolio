@@ -4,9 +4,9 @@ Hi! I'm **Federico Giacomantone**.
 Mechanical engineer and Python dev, passionate about data & ETL.
 
 
-Self taught Python.
+Self taught Python and SQL.
 
-English medium level.
+English intermediate.
 
 
 ## Skills
