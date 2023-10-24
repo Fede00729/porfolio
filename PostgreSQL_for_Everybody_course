@@ -1,0 +1,631 @@
+1---Single Table SQL
+/Serial Fields / Auto Increment
+
+DROP TABLE automagic;
+CREATE TABLE automagic (
+  id SERIAL,
+  name VARCHAR(32),
+  height REAL NOT NULL,
+  PRIMARY KEY(id)
+);
+
+2---Data Relationships
+/Entering Many-to-One Data - Automobiles
+
+CREATE TABLE make (
+    id SERIAL,
+    name VARCHAR(128) UNIQUE,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE model (
+  id SERIAL,
+  name VARCHAR(128),
+  make_id INTEGER REFERENCES make(id) ON DELETE CASCADE,
+  PRIMARY KEY(id)
+);
+
+
+INSERT INTO make (name) VALUES ('Isuzu');
+INSERT INTO make (name) VALUES ('Pontiac');
+
+INSERT INTO model (name, make_id) VALUES ('Ascender 5-passenger 4WD', 1);
+INSERT INTO model (name, make_id) VALUES ('Ascender 7-passenger 2WD', 1);
+INSERT INTO model (name, make_id) VALUES ('Ascender 7-passenger 4WD', 1);
+INSERT INTO model (name, make_id) VALUES ('G6 GT/GTP Convertible', 2);
+INSERT INTO model (name, make_id) VALUES ('G8', 2);
+
+
+SELECT make.name, model.name
+    FROM model
+    JOIN make ON model.make_id = make.id
+    ORDER BY make.name LIMIT 5;
+
+/Building a many-to-many roster
+
+CREATE TABLE student (
+    id SERIAL,
+    name VARCHAR(128) UNIQUE,
+    PRIMARY KEY(id)
+);
+
+DROP TABLE course CASCADE;
+CREATE TABLE course (
+    id SERIAL,
+    title VARCHAR(128) UNIQUE,
+    PRIMARY KEY(id)
+);
+
+DROP TABLE roster CASCADE;
+CREATE TABLE roster (
+    id SERIAL,
+    student_id INTEGER REFERENCES student(id) ON DELETE CASCADE,
+    course_id INTEGER REFERENCES course(id) ON DELETE CASCADE,
+    role INTEGER,
+    UNIQUE(student_id, course_id),
+    PRIMARY KEY (id)
+);
+
+
+INSERT INTO student (name) VALUES ('Witney');
+INSERT INTO student (name) VALUES ('Imama');
+INSERT INTO student (name) VALUES ('Natividad');
+INSERT INTO student (name) VALUES ('Nickhill');
+INSERT INTO student (name) VALUES ('Pawlo');
+INSERT INTO student (name) VALUES ('Angali');
+INSERT INTO student (name) VALUES ('Ceiran');
+INSERT INTO student (name) VALUES ('Malikah');
+INSERT INTO student (name) VALUES ('Sanjay');
+INSERT INTO student (name) VALUES ('Se');
+INSERT INTO student (name) VALUES ('Shonagh');
+INSERT INTO student (name) VALUES ('Abraham');
+INSERT INTO student (name) VALUES ('Kristoffer');
+INSERT INTO student (name) VALUES ('Laura');
+INSERT INTO student (name) VALUES ('Naina');
+
+ id |    name    
+----+------------
+  1 | Witney
+  2 | Imama
+  3 | Natividad
+  4 | Nickhill
+  5 | Pawlo
+  6 | Angali
+  7 | Ceiran
+  8 | Malikah
+  9 | Sanjay
+ 10 | Se
+ 11 | Shonagh
+ 12 | Abraham
+ 13 | Kristoffer
+ 14 | Laura
+ 15 | Naina
+
+INSERT INTO course (title) VALUES ('si106');
+INSERT INTO course (title) VALUES ('si110');
+INSERT INTO course (title) VALUES ('si206');
+
+ id | title 
+----+-------
+  1 | si106
+  2 | si110
+  3 | si206
+
+INSERT INTO roster (student_id, course_id, role) VALUES (1, 1, 1);
+INSERT INTO roster (student_id, course_id, role) VALUES (2, 1, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (3, 1, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (4, 1, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (5, 1, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (6, 2, 1);
+INSERT INTO roster (student_id, course_id, role) VALUES (7, 2, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (8, 2, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (9, 2, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (10, 2, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (11, 3, 1);
+INSERT INTO roster (student_id, course_id, role) VALUES (12, 3, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (13, 3, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (14, 3, 0);
+INSERT INTO roster (student_id, course_id, role) VALUES (15, 3, 0);
+
+ id | student_id | course_id | role 
+----+------------+-----------+------
+  1 |          1 |         1 |    1
+  2 |          2 |         1 |    0
+  3 |          3 |         1 |    0
+  4 |          4 |         1 |    0
+  5 |          5 |         1 |    0
+  6 |          6 |         2 |    1
+  7 |          7 |         2 |    0
+  8 |          8 |         2 |    0
+  9 |          9 |         2 |    0
+ 10 |         10 |         2 |    0
+ 11 |         11 |         3 |    1
+ 12 |         12 |         3 |    0
+ 13 |         13 |         3 |    0
+ 14 |         14 |         3 |    0
+ 15 |         15 |         3 |    0
+
+
+SELECT student.name, course.title, roster.role
+    FROM student 
+    JOIN roster ON student.id = roster.student_id
+    JOIN course ON roster.course_id = course.id
+    ORDER BY course.title, roster.role DESC, student.name;
+
+3-- SQL Techniques
+/Using ALTER TABLE
+
+ALTER TABLE pg4e_debug ADD COLUMN neon781 INTEGER;
+
+
+/Using SELECT DISTINCT
+
+SELECT DISTINCT state FROM taxdata ORDER BY state LIMIT 5;
+
+
+/Making a Stored Procedure
+
+CREATE TABLE keyvalue ( 
+  id SERIAL,
+  key VARCHAR(128) UNIQUE,
+  value VARCHAR(128) UNIQUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY(id)
+);
+
+
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON keyvalue
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+
+/Musical Tracks Many-to-One
+
+CREATE TABLE album (
+  id SERIAL,
+  title VARCHAR(128) UNIQUE,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE track (
+    id SERIAL,
+    title VARCHAR(128),
+    len INTEGER, rating INTEGER, count INTEGER,
+    album_id INTEGER REFERENCES album(id) ON DELETE CASCADE,
+    UNIQUE(title, album_id),
+    PRIMARY KEY(id)
+);
+
+DROP TABLE IF EXISTS track_raw;
+CREATE TABLE track_raw
+ (title TEXT, artist TEXT, album TEXT, album_id INTEGER,
+  count INTEGER, rating INTEGER, len INTEGER);
+
+
+\copy track_raw (title, artist, album, count, rating, len) FROM 'library.csv' WITH DELIMITER ',' CSV;
+
+INSERT INTO album (title) SELECT DISTINCT album FROM track_raw;
+
+UPDATE track_raw SET album_id = (SELECT album.id FROM album WHERE album.title = track_raw.album);
+
+INSERT INTO track (title, len, rating, count, album_id) SELECT title, len, rating, count, album_id FROM track_raw;
+
+
+SELECT track.title, album.title
+    FROM track
+    JOIN album ON track.album_id = album.id
+    ORDER BY track.title LIMIT 3;
+
+           title            |               title                
+----------------------------+------------------------------------
+ A Boy Named Sue (live)     | The Legend Of Johnny Cash
+ A Brief History of Packets | Computing Conversations
+ Aguas De Marco             | Natural Wonders Music Sampler 1999
+
+
+/Unesco Heritage Sites Many-to-One
+
+DROP TABLE unesco_raw;
+CREATE TABLE unesco_raw
+ (name TEXT, description TEXT, justification TEXT, year INTEGER,
+    longitude FLOAT, latitude FLOAT, area_hectares FLOAT,
+    category TEXT, category_id INTEGER, state TEXT, state_id INTEGER,
+    region TEXT, region_id INTEGER, iso TEXT, iso_id INTEGER);
+
+CREATE TABLE category (
+  id SERIAL,
+  name VARCHAR(128) UNIQUE,
+  PRIMARY KEY(id)
+);
+
+
+CREATE TABLE state (
+  id SERIAL,
+  name VARCHAR(128) UNIQUE,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE region (
+  id SERIAL,
+  name VARCHAR(128) UNIQUE,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE iso (
+  id SERIAL,
+  name VARCHAR(128) UNIQUE,
+  PRIMARY KEY(id)
+);
+
+
+\copy unesco_raw(name,description,justification,year,longitude,latitude,area_hectares,category,state,region,iso) FROM 'whc-sites-2018-small.csv' WITH DELIMITER ',' CSV HEADER;
+
+
+INSERT INTO category (name) SELECT DISTINCT category FROM unesco_raw;
+INSERT INTO state (name) SELECT DISTINCT state FROM unesco_raw;
+INSERT INTO region (name) SELECT DISTINCT region FROM unesco_raw;
+INSERT INTO iso (name) SELECT DISTINCT iso FROM unesco_raw;
+
+UPDATE unesco_raw SET category_id = (SELECT category.id FROM category WHERE category.name = unesco_raw.category);
+UPDATE unesco_raw SET state_id = (SELECT state.id FROM state WHERE state.name = unesco_raw.state);
+UPDATE unesco_raw SET region_id = (SELECT region.id FROM region WHERE region.name = unesco_raw.region);
+UPDATE unesco_raw SET iso_id = (SELECT iso.id FROM iso WHERE iso.name = unesco_raw.iso);
+
+CREATE TABLE unesco
+ (name TEXT, description TEXT, justification TEXT, year INTEGER,
+    longitude FLOAT, latitude FLOAT, area_hectares FLOAT, category_id INTEGER, state_id INTEGER,
+    region_id INTEGER, iso_id INTEGER);
+
+INSERT INTO unesco (name, description, justification, year,
+    longitude, latitude, area_hectares, category_id, state_id,
+    region_id, iso_id) SELECT name, description, justification, year,
+    longitude, latitude, area_hectares, category_id, state_id,
+    region_id, iso_id FROM unesco_raw;
+
+
+SELECT unesco.name, year, category.name, state.name, region.name, iso.name
+  FROM unesco
+  JOIN category ON unesco.category_id = category.id
+  JOIN iso ON unesco.iso_id = iso.id
+  JOIN state ON unesco.state_id = state.id
+  JOIN region ON unesco.region_id = region.id
+  ORDER BY category.name, unesco.name
+  LIMIT 3;
+
+            name             | year |   name   |     name     |           name           | name 
+-----------------------------+------+----------+--------------+--------------------------+------
+  Khomani Cultural Landscape | 2017 | Cultural | South Africa | Africa                   | za
+  al Saflieni Hypogeum       | 1980 | Cultural | Malta        | Europe and North America | mt
+  ingvellir National Park    | 2004 | Cultural | Iceland      | Europe and North America | is
+
+/Musical Track Database plus Artists
+
+DROP TABLE album CASCADE;
+CREATE TABLE album (
+    id SERIAL,
+    title VARCHAR(128) UNIQUE,
+    PRIMARY KEY(id)
+);
+
+DROP TABLE track CASCADE;
+CREATE TABLE track (
+    id SERIAL,
+    title TEXT, 
+    artist TEXT, 
+    album TEXT, 
+    album_id INTEGER REFERENCES album(id) ON DELETE CASCADE,
+    count INTEGER, 
+    rating INTEGER, 
+    len INTEGER,
+    PRIMARY KEY(id)
+);
+
+DROP TABLE artist CASCADE;
+CREATE TABLE artist (
+    id SERIAL,
+    name VARCHAR(128) UNIQUE,
+    PRIMARY KEY(id)
+);
+
+DROP TABLE tracktoartist CASCADE;
+CREATE TABLE tracktoartist (
+    id SERIAL,
+    track VARCHAR(128),
+    track_id INTEGER REFERENCES track(id) ON DELETE CASCADE,
+    artist VARCHAR(128),
+    artist_id INTEGER REFERENCES artist(id) ON DELETE CASCADE,
+    PRIMARY KEY(id)
+);
+
+\copy track(title,artist,album,count,rating,len) FROM 'library.csv' WITH DELIMITER ',' CSV;
+
+INSERT INTO album (title) SELECT DISTINCT album FROM track;
+UPDATE track SET album_id = (SELECT album.id FROM album WHERE album.title = track.album);
+
+
+INSERT INTO tracktoartist (track, artist) SELECT DISTINCT title, artist FROM track;
+
+INSERT INTO artist (name) SELECT DISTINCT artist FROM track;
+
+UPDATE tracktoartist SET track_id = (SELECT track.id FROM track WHERE track.title = tracktoartist.track);
+UPDATE tracktoartist SET artist_id = (SELECT artist.id FROM artist WHERE artist.name = tracktoartist.artist);
+
+ALTER TABLE track DROP COLUMN album;
+ALTER TABLE track DROP COLUMN artist;
+ALTER TABLE tracktoartist DROP COLUMN track;
+ALTER TABLE tracktoartist DROP COLUMN artist;
+
+
+SELECT track.title, album.title, artist.name
+FROM track
+JOIN album ON track.album_id = album.id
+JOIN tracktoartist ON track.id = tracktoartist.track_id
+JOIN artist ON tracktoartist.artist_id = artist.id
+ORDER BY track.title
+LIMIT 3;
+
+           title            |               title                |         name          
+----------------------------+------------------------------------+-----------------------
+ A Boy Named Sue (live)     | The Legend Of Johnny Cash          | Johnny Cash
+ A Brief History of Packets | Computing Conversations            | IEEE Computer Society
+ Aguas De Marco             | Natural Wonders Music Sampler 1999 | Rosa Passos
+
+
+4-- Text in PostgreSQL
+
+/Regular Expressions
+
+[:,;]+
+
+/Generating Text
+
+CREATE TABLE bigtext (
+  content TEXT
+);
+
+INSERT INTO bigtext (content)
+SELECT 'This is record number ' || generate_series(100000,199999) || ' of quite a few text records.';
+
+/Break a Hashing Function
+AJS ASM
+
+5-- Natural Language
+
+/Reverse Index in SQL
+
+DROP TABLE docs01 CASCADE;
+CREATE TABLE docs01 (id SERIAL, doc TEXT, PRIMARY KEY(id));
+
+
+DROP TABLE invert01 CASCADE;
+CREATE TABLE invert01 (
+  keyword TEXT,
+  doc_id INTEGER REFERENCES docs01(id) ON DELETE CASCADE
+);
+
+INSERT INTO docs01 (doc) VALUES
+('It is not easy to read or write machine language so it is nice that we'),
+('have interpreters and compilers that'),
+('allow us to write in highlevel languages like Python or C'),
+('Now at this point in our discussion of compilers and interpreters you'),
+('should be wondering a bit about the Python interpreter itself What'),
+('language is it written in Is it written in a compiled language When we'),
+('type python what exactly is happening'),
+('The Python interpreter is written in a highlevel language called C'),
+('You can look at the actual source code for the Python interpreter by'),
+('source code So Python is a program itself and it is compiled into');
+
+INSERT INTO invert01 (doc_id, keyword)
+SELECT DISTINCT id, s.keyword AS keyword
+FROM docs01 AS D, unnest(string_to_array(lower(D.doc), ' ')) s(keyword)
+ORDER BY id;                      
+
+
+SELECT keyword, doc_id FROM invert01 ORDER BY keyword, doc_id LIMIT 10;
+
+ keyword  | doc_id 
+----------+--------
+ actually |     10
+ and      |      2
+ and      |      7
+ as       |      4
+ at       |      7
+ become   |      4
+ best     |      7
+ bit      |      8
+ but      |      2
+ but      |      3
+
+
+/Reverse Index (with stop words) in SQL
+
+DROP TABLE docs02 CASCADE;
+CREATE TABLE docs02 (id SERIAL, doc TEXT, PRIMARY KEY(id));
+
+DROP TABLE invert02 CASCADE;
+CREATE TABLE invert02 (
+  keyword TEXT,
+  doc_id INTEGER REFERENCES docs02(id) ON DELETE CASCADE
+);
+
+DELETE FROM invert02;
+
+INSERT INTO docs02 (doc) VALUES
+('It is not easy to read or write machine language so it is nice that we'),
+('have interpreters and compilers that'),
+('allow us to write in highlevel languages like Python or C'),
+('Now at this point in our discussion of compilers and interpreters you'),
+('should be wondering a bit about the Python interpreter itself What'),
+('language is it written in Is it written in a compiled language When we'),
+('type python what exactly is happening'),
+('The Python interpreter is written in a highlevel language called C'),
+('You can look at the actual source code for the Python interpreter by'),
+('source code So Python is a program itself and it is compiled into');
+
+DROP TABLE stop_words CASCADE;
+CREATE TABLE stop_words (word TEXT unique);
+
+INSERT INTO stop_words (word) VALUES 
+('i'), ('a'), ('about'), ('an'), ('are'), ('as'), ('at'), ('be'), 
+('by'), ('com'), ('for'), ('from'), ('how'), ('in'), ('is'), ('it'), ('of'), 
+('on'), ('or'), ('that'), ('the'), ('this'), ('to'), ('was'), ('what'), 
+('when'), ('where'), ('who'), ('will'), ('with');
+
+INSERT INTO invert02 (doc_id, keyword)
+SELECT DISTINCT id, s.keyword AS keyword
+FROM docs02 AS D, unnest(string_to_array(lower(D.doc), ' ')) s(keyword)
+WHERE s.keyword NOT IN (SELECT word FROM stop_words)
+ORDER BY id;
+
+
+SELECT keyword, doc_id FROM invert02 ORDER BY keyword, doc_id LIMIT 10;
+
+keyword    |  doc_id
+-----------+--------
+actually   |    10   
+and        |    2    
+and        |    7    
+become     |    4    
+best       |    7    
+bit        |    8    
+but        |    2    
+but        |    3    
+character  |    8    
+confused   |    8    
+
+/String Array GIN Index
+
+DROP TABLE docs03 cascade;
+CREATE TABLE docs03 (id SERIAL, doc TEXT, PRIMARY KEY(id));
+
+DROP INDEX array03;
+CREATE INDEX array03 ON docs03 USING gin(string_to_array(lower(doc), ' ')  array_ops);
+
+INSERT INTO docs03 (doc) VALUES
+('It is not easy to read or write machine language so it is nice that we'),
+('have interpreters and compilers that'),
+('allow us to write in highlevel languages like Python or C'),
+('Now at this point in our discussion of compilers and interpreters you'),
+('should be wondering a bit about the Python interpreter itself What'),
+('language is it written in Is it written in a compiled language When we'),
+('type python what exactly is happening'),
+('The Python interpreter is written in a highlevel language called C'),
+('You can look at the actual source code for the Python interpreter by'),
+('source code So Python is a program itself and it is compiled into');
+
+INSERT INTO docs03 (doc) SELECT 'Neon ' || generate_series(10000,20000);
+
+SELECT id, doc FROM docs03 WHERE '{interpreters}' <@ string_to_array(lower(doc), ' ');
+EXPLAIN SELECT id, doc FROM docs03 WHERE '{interpreters}' <@ string_to_array(lower(doc), ' ');
+
+
+/GIN ts_vector Index
+
+DROP TABLE docs03 cascade;
+DROP INDEX array03;
+
+CREATE TABLE docs03 (id SERIAL, doc TEXT, PRIMARY KEY(id));
+CREATE INDEX array03 ON docs03 USING gin(to_tsvector('english', doc));
+
+INSERT INTO docs03 (doc) VALUES
+('It is not easy to read or write machine language so it is nice that we'),
+('have interpreters and compilers that'),
+('allow us to write in highlevel languages like Python or C'),
+('Now at this point in our discussion of compilers and interpreters you'),
+('should be wondering a bit about the Python interpreter itself What'),
+('language is it written in Is it written in a compiled language When we'),
+('type python what exactly is happening'),
+('The Python interpreter is written in a highlevel language called C'),
+('You can look at the actual source code for the Python interpreter by'),
+('source code So Python is a program itself and it is compiled into');
+
+INSERT INTO docs03 (doc) SELECT 'Neon ' || generate_series(10000,20000);
+
+SELECT id, doc FROM docs03 WHERE to_tsquery('english', 'interpreters') @@ to_tsvector('english', doc);
+EXPLAIN SELECT id, doc FROM docs03 WHERE to_tsquery('english', 'interpreters') @@ to_tsvector('english', doc);
+
+7-- JSON and PostgreSQL
+
+/Making a connection from Python
+
+cur = conn.cursor()
+cur.execute('SELECT line FROM pythonfun WHERE line LIKE 'Have a nice%';')
+
+
+/Inserting a sequence of numbers in Python
+
+import psycopg2
+import hidden
+
+secrets = hidden.secrets()
+conn = psycopg2.connect(host=secrets['host'],
+        port=secrets['port'],
+        database=secrets['database'],
+        user=secrets['user'],
+        password=secrets['pass'],
+        connect_timeout=3)
+
+cur = conn.cursor()
+cur.execute('DROP TABLE IF EXISTS pythonseq CASCADE;')
+cur.execute('CREATE TABLE pythonseq (iter INTEGER, val INTEGER);')
+
+number = 643032
+for i in range(300) :
+    sql = 'INSERT INTO pythonseq (iter, val) VALUES ( %s , %s );'
+    cur.execute(sql, (i, number))
+    number = int((number * 22) / 7) % 1000000
+
+conn.commit()
+cur.close()
+
+
+/Loading JSON from PokéAPI
+
+import psycopg2
+import hidden
+import requests
+
+secrets = hidden.secrets()
+conn = psycopg2.connect(host=secrets['host'],
+        port=secrets['port'],
+        database=secrets['database'],
+        user=secrets['user'],
+        password=secrets['pass'],
+        connect_timeout=3)
+
+cur = conn.cursor()
+clean = 'DROP TABLE IF EXISTS pokeapi CASCADE;'
+sql = '''
+CREATE TABLE IF NOT EXISTS pokeapi (id INTEGER, body JSONB);
+'''
+cur.execute(clean)
+cur.execute(sql)
+
+count = 1
+
+while count < 101:
+    url = f'https://pokeapi.co/api/v2/pokemon/{count}'
+
+    text = "None"
+    print('=== Url is', url)
+    response = requests.get(url)
+    text = response.text
+
+    sql = 'INSERT INTO pokeapi (body) VALUES ( %s );'
+    cur.execute(sql, (text, ))
+    count = count + 1
+    print(count)
+
+conn.commit()
+cur.close()
